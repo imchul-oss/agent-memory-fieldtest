@@ -1,1 +1,1 @@
-싣지 않은 구성 83개(79개를 잰 가운데 29개를 표에 싣고 50개를 뺌, 돌리지 않고 결과를 예상해 닫은 13개, 잴 수 없었던 20개) / 83 configurations are not shown (of the 79 measured, 29 are in the table and 50 were left out; 13 were closed by prediction and 20 could not be measured)
+표에 싣지 않은 구성 83개(79개를 잰 가운데 29개를 표에 싣고 50개를 뺌, 돌리지 않고 결과를 예상해 닫은 13개, 잴 수 없었던 20개)는 results/excluded.ko.md에 있음 / 83 configurations are not in the table (of the 79 measured, 29 are in the table and 50 were left out; 13 were closed by prediction and 20 could not be measured) and are listed in results/excluded.md

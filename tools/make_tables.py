@@ -9,8 +9,11 @@ editions always show the same numbers. A region is the text between
 
   <!-- table:NAME -->  and  <!-- /table:NAME -->
 
-with NAME `results` or `appendix` (README files) or `full` (full-table documents). Run it from any folder; paths are taken relative to this file. Standard library only.
-Do not edit a region by hand: the next run overwrites it. Edit results/results.csv instead.
+with NAME `results` or `appendix` (README files), `full` (full-table documents) or `excluded` (results/excluded.md and
+results/excluded.ko.md, written from results/excluded.csv: the configurations that are not in the README table, measured
+ones first by Hit@5, then those closed by prediction, then those that could not be measured, each group by name; the
+table has no # column). Run it from any folder; paths are taken relative to this file. Standard library only.
+Do not edit a region by hand: the next run overwrites it. Edit results/results.csv or results/excluded.csv instead.
 """
 import csv
 import os
@@ -34,6 +37,8 @@ TXT = {
                     "승(베이스라인 대비)", "패(베이스라인 대비)", "p값(부호 검정)", "멀티홉 질문 25개 중 정답 노트 둘 다 상위 5개 안에 든 수",
                     "answer score(답 점수, 200점 만점)", "설치 조건(키, 모델, RAM)", "권장 구성대로 돌았는가", "비고(권장 구성과 다른 점, 실행 조건)"],
         "appendix": ["식별자", "이름", "분류", "질문할 때 언어 모델 호출"],
+        "ex_head": ["이름", "종류", "분류", "Hit@5(100개 중)", "승 / 패(베이스라인 대비)", "p값", "까닭"],
+        "ex_group": {"measured": "잰 뒤 뺀 것", "predicted": "돌리지 않고 예상으로 닫은 것", "blocked": "잴 수 없었던 것"},
     },
     "en": {
         "kind": {"baseline": "baseline", "reference": "reference row", "product": "product", "technique": "technique"},
@@ -50,6 +55,8 @@ TXT = {
                     "Multi-hop: both answer notes in the top 5 (of 25 questions)", "Answer score (of 200)",
                     "Setup (key, model, RAM)", "Followed the recommended configuration", "Notes (differences from the recommendation, run conditions)"],
         "appendix": ["Identifier", "Name", "Group", "Language model at query time"],
+        "ex_head": ["Name", "Kind", "Group", "Hit@5 (of 100)", "Wins / Losses (vs. baseline)", "p-value", "Reason"],
+        "ex_group": {"measured": "measured, then left out", "predicted": "closed by prediction", "blocked": "could not be measured"},
     },
 }
 
@@ -164,6 +171,27 @@ def appendix_table(rows, ed):
     return "\n".join(out)
 
 
+def load_excluded():
+    with open(os.path.join(ROOT, "results", "excluded.csv"), encoding="utf-8", newline="") as f:
+        return list(csv.DictReader(f))
+
+
+def excluded_table(rows, ed):
+    t = TXT[ed]
+    order = {"measured": 0, "predicted": 1, "blocked": 2}
+
+    def key(r):
+        return (order[r["group"]], -int(r["hit5"] or 0), r["name_" + ed].lower(), r["id"])
+    out = [line(t["ex_head"]), "|" + "---|" * len(t["ex_head"])]
+    for r in sorted(rows, key=key):
+        measured = r["group"] == "measured"
+        pv = "<0.001" if r["p"] == "0.000" else r["p"]
+        out.append(line([r["name_" + ed], t["kind"][r["kind"]], t["ex_group"][r["group"]],
+                         r["hit5"] if measured else "-", "%s / %s" % (r["wins"], r["losses"]) if measured else "-",
+                         pv if measured else "-", r["reason_" + ed]]))
+    return chr(10).join(out)
+
+
 def replace_region(text, name, body):
     rx = re.compile(r"(<!--\s*table:%s\s*-->)(.*?)(<!--\s*/table:%s\s*-->)" % (name, name), re.S)
     if not rx.search(text):
@@ -187,7 +215,15 @@ def main():
         text = replace_region(text, "full", full_table(rows, ed))
         with open(path, "w", encoding="utf-8", newline="") as f:
             f.write(text)
-    print("tables rewritten from %d rows" % len(rows))
+    ex = load_excluded()
+    for ed in ("ko", "en"):
+        path = os.path.join(ROOT, "results", "excluded.md" if ed == "en" else "excluded.%s.md" % ed)
+        with open(path, encoding="utf-8", newline="") as f:
+            text = f.read()
+        text = replace_region(text, "excluded", excluded_table(ex, ed))
+        with open(path, "w", encoding="utf-8", newline="") as f:
+            f.write(text)
+    print("tables rewritten from %d rows and %d excluded rows" % (len(rows), len(ex)))
 
 
 if __name__ == "__main__":

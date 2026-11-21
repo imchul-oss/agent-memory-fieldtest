@@ -2,7 +2,7 @@
 
 **English** | [한국어](README.ko.md)
 
-This test asked how well agent memory tools find the right note on mixed Korean and English notes, using Hit@5[^hit5] (of 100): the number of questions for which an answer note lands in the top 5 results. Agent search[^agent] reached 99 of 100 questions, against 84 for the baseline[^baseline], plain BM25[^bm25] search. Among products that call no language model at query time, ir scored highest at 93, with its optional reranking[^rerank] step switched off. The semantic search setup we used before, which compares notes by embedding[^embedding] similarity, scored 48. The table gives a p-value[^pvalue] for each row that has a completed score, from an exact two-sided sign test[^sign].
+This test asked how well agent memory tools find the right note on mixed Korean and English notes, using Hit@5[^hit5] (of 100): the number of questions for which an answer note lands in the top 5 results. Agent search[^agent] reached 99 of 100 questions, against 84 for the baseline[^baseline], plain BM25[^bm25] search. Among products that ran to the end in their recommended setup and call no language model at query time, ir scored highest at 93, with its optional reranking[^rerank] step switched off. The semantic search setup we used before, which compares notes by embedding[^embedding] similarity, scored 48. The table gives a p-value[^pvalue] for each row that has a completed score, from an exact two-sided sign test[^sign].
 
 This is a field test of agent memory tools on real notes that mix Korean and English, not a new memory system. It reports a measured comparison and the setup chosen from it. The same method measured 79 configurations on 287 notes and 100 questions, and the table in this repository holds 29 rows. 26 of them ran to the end in their recommended setup and passed the run check. The other 3 are exceptions: the BM25 baseline, one reference row (the semantic search setup we used before), and Hindsight, which is on hold with interim results only.
 
@@ -50,18 +50,20 @@ The number in # follows the order of Hit@5, and a row whose p-value is 0.05 or m
 
 Full table with all 13 columns: [results/full-table.md](results/full-table.md)
 
+The 83 configurations that are not in this table are listed with their reasons in [results/excluded.md](results/excluded.md). Their scores cannot be compared with this table under the same conditions.
+
 ### Conclusions
 
 These conclusions are about agent memory tools on mixed Korean and English notes, and each rests on the table above.
 
 - <!-- claim:C1 -->Agent search on top of BM25 search reached a Hit@5 of 99 of 100 (the baseline: 84), with 16 wins and 1 loss, a p-value below 0.001, answer scores of 189 against 150, and 98-99 when the same setup was run again.
-- <!-- claim:C2 -->No memory-store product that ran to the end was confirmed to beat the BM25 baseline: of the 5, the best, MemPalace (83), had 4 wins and 5 losses for a p-value of 1.000, and the rest scored 66-82. Hindsight is on hold and is not part of this conclusion.
-- <!-- claim:C3 -->The 5 embedding-centred tools scored 46-81 and did not pass the baseline, and the Basic Memory recommended run, with its embedding replaced and its minimum similarity lowered, was lowest at 46, but ir, which mixes BM25 and vectors, scored 93 and beat the baseline (10 wins, 1 loss, p-value 0.012).
-- <!-- claim:C4 -->Among products that call no language model at query time, ir scored highest at 93, with an answer score of 167, 10 wins, 1 loss and a p-value of 0.012.
+- <!-- claim:C2 -->No memory-store product that ran to the end in its recommended setup was confirmed to beat the BM25 baseline: of the 5, the best, MemPalace (83), had 4 wins and 5 losses for a p-value of 1.000, and the rest scored 66-82. Hindsight is on hold and is not part of this conclusion.
+- <!-- claim:C3 -->The 5 embedding-centred tools in the table, all run to the end in their recommended setup, scored 46-81 and did not pass the baseline, and the Basic Memory recommended run, with its embedding replaced and its minimum similarity lowered, was lowest at 46, but ir, which mixes BM25 and vectors, scored 93 and beat the baseline (10 wins, 1 loss, p-value 0.012).
+- <!-- claim:C4 -->Among products that ran to the end in their recommended setup and call no language model at query time, ir scored highest at 93, with an answer score of 167, 10 wins, 1 loss and a p-value of 0.012.
 - <!-- claim:C5 -->Adding KURE-v2 reranking to the top 50 of BM25 search gave a Hit@5 of 88, and the answer score rose by a confirmed margin (10 wins, 0 losses, p-value 0.002); the difference in Hit@5 is not yet confirmed (4 wins, 0 losses, p-value 0.125).
 - <!-- claim:C6 -->The hierarchical index scored 91 and, on the 25 multi-hop[^multihop] questions, had both answer notes in the top 5 for 22 instead of 5 (17 wins, 0 losses), but on the 30 knowledge update[^update] questions its Hit@5 fell from 28 to 24-25.
-- <!-- claim:C7 -->The top scores crowd near the maximum (a ceiling effect), so these 100 questions can hardly tell the top configurations apart, and only one row in the table reaches 98 or more (agent search, 99).
-- <!-- claim:C8 -->79 configurations were measured on the same 100 questions and 29 are in the table; 83 configurations are not shown, of which 50 were measured and left out, 13 were closed by prediction and 20 could not be measured.
+- <!-- claim:C7 -->The top scores crowd near the maximum (a ceiling effect), so these 100 questions can hardly tell the top configurations apart, and among configurations run to the end in the recommended setup and judged valid, only one row in the table reaches 98 or more (agent search, 99). Two left-out rows, both agents that read the note files directly, score 99 and 100, but they cannot be compared under the same conditions ([results/excluded.md](results/excluded.md)).
+- <!-- claim:C8 -->79 configurations were measured on the same 100 questions and 29 are in the table; the other 83 are listed in a separate document ([results/excluded.md](results/excluded.md)), of which 50 were measured and left out, 13 were closed by prediction and 20 could not be measured.
 - <!-- claim:C9 -->The basic-memory production setting, the semantic search setup we used, scored 48, below the baseline (0 wins, 36 losses, p-value below 0.001, answer score 95 against 150).
 
 ### About the table and the numbers
@@ -115,9 +117,9 @@ Each tool was run with the settings its own documentation recommends. Some tools
 - Reference row: the semantic search setup we used in daily work. It is valid, but it is not any tool's recommended configuration, so it is marked as a reference row.
 - Hindsight: on hold. The recommended setup, in which a language model extracts facts and merges memories, could not be run to the end because of the resources it needs: reaching 65% of the consolidation step on the 287 notes took about 2,000 model calls. One row holds the conditions of each run, and both values are shown as interim results. Its comparison cells against the baseline are left empty.
 
-Every other configuration is shown neither by name nor by score; only counts are given. Of the 79 measured, 29 are in the table. 83 configurations are not shown: 50 that were measured and then left out, 13 that were closed by prediction, and 20 that could not be measured.
+Every other configuration is listed in a separate document, [results/excluded.md](results/excluded.md), by name, with its score where one was measured. Of the 79 measured, 29 are in the table. 83 configurations are not in the table: 50 that were measured and then left out, 13 that were closed by prediction, and 20 that could not be measured. The scores in that document cannot be compared with the table under the same conditions.
 
-The four numbers 84, 79, 13 and 20 count different things and do not add up to one total. The 84 are the candidates put forward. The 79 are measured test configurations: they include 3 of our own and 2 combinations, and one tool can appear with more than one configuration, for example a tool whose recommended configuration was blocked and that was measured in a configuration that needs no key. The 13 closed by prediction are 7 single tools and 6 combinations. The 20 that could not be measured are 2 whose default model our model-use rules rule out and that could not be tested with a replacement, 15 of a kind these questions cannot measure, namely decision-record and session-record tools, and 3 whose required keys were not provided. Each is counted per configuration, and we did not map them one by one back to the 84. The 83 not shown and the 79 measured overlap only in the 50 that were measured and left out; the 13 and the 20 were never measured.
+The four numbers 84, 79, 13 and 20 count different things and do not add up to one total. The 84 are the candidates put forward. The 79 are measured test configurations: they include 3 of our own and 2 combinations, and one tool can appear with more than one configuration, for example a tool whose recommended configuration was blocked and that was measured in a configuration that needs no key. The 13 closed by prediction are 7 single tools and 6 combinations. The 20 that could not be measured are 2 whose default model our model-use rules rule out and that could not be tested with a replacement, 15 of a kind these questions cannot measure, namely decision-record and session-record tools, and 3 whose required keys were not provided. Each is counted per configuration, and we did not map them one by one back to the 84. The 83 left out of the table and the 79 measured overlap only in the 50 that were measured and left out; the 13 and the 20 were never measured.
 
 ## Measurement procedure and metrics
 
@@ -151,7 +153,7 @@ There were 78 comparisons (the 79 measured configurations minus the baseline its
 
 - The sample is 287 notes in one folder, while the real store holds about 1,800 notes with a folder structure. Nothing was measured at the real scale (unverified).
 - The 100 questions were written from the sample notes, so words of the notes may have leaked into the questions and may favour BM25 search (estimate).
-- The top scores crowd near the maximum (a ceiling effect). Only one configuration reaches 98 or more (agent search, 99), so these questions can hardly tell the top configurations apart.
+- The top scores crowd near the maximum (a ceiling effect). Among configurations run to the end in the recommended setup, only one reaches 98 or more (agent search, 99), so these questions can hardly tell the top configurations apart.
 - Most configurations were run once. Rerun with the same settings, the top 5 lists of agent search changed on 36-45% of the questions while the Hit@5 was 98 in one run and 99 in the other. The hierarchical index scored 90-92 over three runs.
 - The answer score is the value after a fixed answer step that read only the first 6,000 characters of each note. It measures finding and reading together.
 - The 78 comparisons were not corrected (Statistics section).
