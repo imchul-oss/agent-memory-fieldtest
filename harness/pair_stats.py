@@ -2,7 +2,8 @@
 
 For each configuration: how many questions have a gold note in the top 5 (hit5), how many questions it finds
 that the baseline misses (win) and loses (loss), the exact two-sided sign-test p-value of that split, the same for
-"all gold notes of a multi-note question are in the top 5" (bothOf25, bWin, bLoss, bP), and, where blind grades
+"all gold notes of a multi-note question are in the top 5" (bothOf25, bWin, bLoss, bP; like hit5, counted only on
+questions shared with the baseline), and, where blind grades
 exist, the answer score and its own win, loss and p. Aggregate counts only.
 
   python harness/pair_stats.py --top5 top5.jsonl --questions questions.jsonl --out pair-stats.tsv
@@ -77,7 +78,7 @@ def table(top5, questions, base, grades=None):
         else:
             a = ["-", "-", "-", "-"]
         rows.append([arm, "-", len(qs), sum(hit[arm][q] for q in qs), w, l, "%.3f" % sign_test_p(w, l),
-                     sum(ma.values()), bw, bl, "%.3f" % sign_test_p(bw, bl)] + a)
+                     sum(ma[q] for q in mq), bw, bl, "%.3f" % sign_test_p(bw, bl)] + a)
     return rows
 
 

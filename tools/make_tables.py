@@ -4,7 +4,7 @@
   python tools/make_tables.py
 
 The narrow results table and the appendix table in both README files, and the full 13-column table in
-results/full-table.md and results/full-table.ko.md, are generated here and nowhere else (the first column `#` numbers the rows by Hit@5, equal counts sharing a number, and shows `-` for the baseline, the reference row and the on-hold row), so the two
+results/full-table.md and results/full-table.ko.md, are generated here and nowhere else (rows are ordered by Hit@5, then by answer score, then by id; the first column `#` numbers the rows by Hit@5, equal counts sharing a number, and shows `-` for the baseline, the reference row and the on-hold row), so the two
 editions always show the same numbers. A region is the text between
 
   <!-- table:NAME -->  and  <!-- /table:NAME -->
@@ -98,8 +98,8 @@ def full_table(rows, ed):
         name, followed = r["name_" + ed], t["yn"][r["followed_recommended"]]
         if r["hit5_first"]:
             # a row with two runs on hold: both values are interim results and are marked as such
-            hit = "%s (%s, %s), %s (%s, %s)" % (hit, t["interim"], t["second"], r["hit5_first"], t["interim"], t["first"])
-            ans = "%s (%s, %s), %s (%s, %s)" % (ans, t["interim"], t["second"], r["answer_200_first"], t["interim"], t["first"])
+            hit = "%s (%s, %s), %s (%s, %s)" % (r["hit5_first"], t["interim"], t["first"], hit, t["interim"], t["second"])
+            ans = "%s (%s, %s), %s (%s, %s)" % (r["answer_200_first"], t["interim"], t["first"], ans, t["interim"], t["second"])
             name += " (%s)" % t["hold"]
             followed += " (%s)" % t["hold"]
         base = r["kind"] == "baseline"
@@ -127,12 +127,14 @@ def short(text, limit=100):
 
 
 def hold_condition(text):
-    """One line for the on-hold row: its first sentence without the parenthesis, and the sentence that holds 65%."""
+    """One line for the on-hold row: its first sentence without the parenthesis, the sentence that holds 65%,
+    and the sentence that says whether the models are the tool's defaults. Each part ends with its own full stop."""
     sents = re.split(r"(?<=[.]) ", text.strip())
     first = re.sub(r"\s*\([^)]*\)", "", sents[0]).rstrip(".")
     second = [s for s in sents[1:] if "65%" in s][0]
     second = re.match(r"(.*?65%.*?\))", second).group(1)
-    return first + ". " + second
+    third = [x for x in sents if re.match(r"(Default or not|기본값 여부)", x)][0].rstrip(".")
+    return first + ". " + second + ". " + third + "."
 
 
 def narrow_table(rows, ed):
@@ -143,7 +145,7 @@ def narrow_table(rows, ed):
         hit, name = r["hit5"], r["name_" + ed]
         base = r["kind"] == "baseline"
         if r["hit5_first"]:
-            hit = "%s (%s, %s), %s (%s, %s)" % (hit, t["interim"], t["second"], r["hit5_first"], t["interim"], t["first"])
+            hit = "%s (%s, %s), %s (%s, %s)" % (r["hit5_first"], t["interim"], t["first"], hit, t["interim"], t["second"])
             name += " (%s)" % t["hold"]
             gl, pv, cond = "-", "-", hold_condition(r["condition_" + ed])
         else:

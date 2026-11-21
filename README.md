@@ -4,11 +4,11 @@
 
 This test asked how well agent memory tools find the right note on mixed Korean and English notes, using Hit@5[^hit5] (of 100): the number of questions for which an answer note lands in the top 5 results. Agent search[^agent] reached 99 of 100 questions, against 84 for the baseline[^baseline], plain BM25[^bm25] search. Among products that call no language model at query time, ir scored highest at 93, with its optional reranking[^rerank] step switched off. The semantic search setup we used before, which compares notes by embedding[^embedding] similarity, scored 48. The table gives a p-value[^pvalue] for each row that has a completed score, from an exact two-sided sign test[^sign].
 
-A field test of agent memory tools on real notes that mix Korean and English. It is not a new memory system: it shows a comparison that was measured, and the setup chosen from it. 79 configurations were measured the same way on 287 notes and 100 questions. The table in this repository has 29 rows. 26 of them ran to the end in their recommended setup and passed the run check. The other 3 are exceptions: the BM25 baseline, one reference row (the semantic search setup we used before), and Hindsight, which is on hold and has interim results only.
+This is a field test of agent memory tools on real notes that mix Korean and English, not a new memory system. It reports a measured comparison and the setup chosen from it. The same method measured 79 configurations on 287 notes and 100 questions, and the table in this repository holds 29 rows. 26 of them ran to the end in their recommended setup and passed the run check. The other 3 are exceptions: the BM25 baseline, one reference row (the semantic search setup we used before), and Hindsight, which is on hold with interim results only.
 
 Author: imchul-oss.
 
-<!-- prior --> Searched on 2026-11-21. Query: agent memory tools benchmark Korean English mixed notes. Result: there are small public tests that compare a few models on 30 Korean notes and 40 questions, and large multilingual search tests, but I found no public comparison of memory-tool products on the same notes and the same questions. Difference: this repository compares 19 products (18 run to the end, Hindsight on hold) and 8 techniques on the same 100 questions, and also reports answer scores and the run check.
+<!-- prior --> Searched on 2026-11-21. Query: agent memory tools benchmark Korean English mixed notes. Result: the list held general agent-memory benchmarks, for example "Evaluating Memory in LLM Agents via Incremental Multi-Turn Interactions" (https://arxiv.org/html/2507.05257v2) and "Memory in the LLM Era" (https://arxiv.org/html/2604.01707v1), and none of its results dealt with mixed Korean and English notes; I found no public comparison of memory-tool products on the same notes and the same questions. Difference: this repository compares 19 products (18 run to the end, Hindsight on hold) and 8 techniques on the same 100 questions, and also reports answer scores and the run check.
 
 ## Results
 
@@ -21,7 +21,7 @@ Author: imchul-oss.
 | 4 | knowledge-rag | product | 90 | 8 / 2 | 0.109 | Both models differ from the product defaults (the English-only default reranker was replaced by a multilingual one) |
 | 5 | AutoRAG Lite | product | 89 | 6 / 1 | 0.125 | The default dense embedding (1,024 dimensions) was replaced |
 | 6 | KURE-v2 reranking | technique | 88 | 4 / 0 | 0.125 | Sorted by KURE-v2 scores alone, not mixed with BM25 |
-| - | Hindsight (on hold) | product | 86 (interim result, second run), 88 (interim result, first run) | - | - | On hold: the recommended setup could not be run to the end. Reaching 65% of the consolidation step on the 287 notes took about 2,000 model calls (1,974) |
+| - | Hindsight (on hold) | product | 88 (interim result, first run), 86 (interim result, second run) | - | - | On hold: the recommended setup could not be run to the end. Reaching 65% of the consolidation step on the 287 notes took about 2,000 model calls (1,974). Default or not (embedding model multilingual-e5-small, reranker model): not confirmed in the run record. |
 | 7 | Extra Korean morpheme BM25 route (lindera) | technique | 84 | 2 / 2 | 1.000 | The BM25 formula was implemented directly |
 | - | Korean BM25 search (baseline) | baseline | 84 | - | - | Not applicable (this is the baseline itself) |
 | 8 | EmbeddingGemma dense route added | technique | 83 | 2 / 3 | 1.000 | No difference recorded |
@@ -56,7 +56,7 @@ These conclusions are about agent memory tools on mixed Korean and English notes
 
 - <!-- claim:C1 -->Agent search on top of BM25 search reached a Hit@5 of 99 of 100 (the baseline: 84), with 16 wins and 1 loss, a p-value below 0.001, answer scores of 189 against 150, and 98-99 when the same setup was run again.
 - <!-- claim:C2 -->No memory-store product that ran to the end was confirmed to beat the BM25 baseline: of the 5, the best, MemPalace (83), had 4 wins and 5 losses for a p-value of 1.000, and the rest scored 66-82. Hindsight is on hold and is not part of this conclusion.
-- <!-- claim:C3 -->The 5 embedding-centred tools scored 46-81 and did not pass the baseline, and the Basic Memory recommended run was lowest at 46, but ir, which mixes BM25 and vectors, scored 93 and beat the baseline (10 wins, 1 loss, p-value 0.012).
+- <!-- claim:C3 -->The 5 embedding-centred tools scored 46-81 and did not pass the baseline, and the Basic Memory recommended run, with its embedding replaced and its minimum similarity lowered, was lowest at 46, but ir, which mixes BM25 and vectors, scored 93 and beat the baseline (10 wins, 1 loss, p-value 0.012).
 - <!-- claim:C4 -->Among products that call no language model at query time, ir scored highest at 93, with an answer score of 167, 10 wins, 1 loss and a p-value of 0.012.
 - <!-- claim:C5 -->Adding KURE-v2 reranking to the top 50 of BM25 search gave a Hit@5 of 88, and the answer score rose by a confirmed margin (10 wins, 0 losses, p-value 0.002); the difference in Hit@5 is not yet confirmed (4 wins, 0 losses, p-value 0.125).
 - <!-- claim:C6 -->The hierarchical index scored 91 and, on the 25 multi-hop[^multihop] questions, had both answer notes in the top 5 for 22 instead of 5 (17 wins, 0 losses), but on the 30 knowledge update[^update] questions its Hit@5 fell from 28 to 24-25.
@@ -66,7 +66,9 @@ These conclusions are about agent memory tools on mixed Korean and English notes
 
 ### About the table and the numbers
 
-The table is generated from one source, `results/results.csv`. One row holds the # number, the name, kind, Hit@5, the wins and losses against the baseline, the p-value, and short notes. The full table has 13 columns and adds group, setup, whether the recommended configuration was followed, and the differences; it is in `results/full-table.md`. The Hindsight row holds both interim values, marked as such, and the conditions of each run in one row; its comparison cells against the baseline are empty.
+The tables are generated from one source, `results/results.csv`. A row of the table above holds the # number, the name, the kind, Hit@5, wins and losses against the baseline, the p-value, and short notes. The full table in `results/full-table.md` adds group, setup, whether the recommended configuration was followed, and the differences, 13 columns in all. Rows are ordered by Hit@5, and rows with the same Hit@5 are ordered by answer score, then by identifier; equal Hit@5 share a number in #. The Hindsight row lists its two interim values in run order (first run, then second run) together with the conditions of each run. Its #, wins, losses and p-value cells are empty because interim values from unfinished runs are not compared with the baseline.
+
+In the full table, yes in the column on the recommended configuration means the run followed the tool's recommended setup apart from the replacements listed in the notes column. A technique is one of our own constructions or a pairing of tools and has no recommended setup of a tool, so for it yes means the run used the simplest documented setup. The baseline and the reference row show n/a.
 
 Most numbers above can be read or recounted from the table above or the full table: for a row, the Hit@5, wins, losses, the p-value, the multi-hop count, and the answer score. Three kinds come from elsewhere. The repeat-run values (98-99 for agent search, 90-92 for the hierarchical index, 24-25 on knowledge update questions) come from the repeat-run records. The pair counts by question type (17 wins and 0 losses on multi-hop questions, 28 to 24-25 on knowledge update questions) come from the question-by-question comparison with the baseline. The answer-score comparison for KURE-v2 reranking (10 wins, 0 losses, 0.002) is the same comparison applied to answer scores. None of these is a column of either table.
 
@@ -107,7 +109,7 @@ A question file is JSON Lines with one question per line. The fields are `q`, th
 
 A long list of 1,119 rows was filtered and scored, and 84 candidates were put forward: 12 picked by the rule and 72 added by hand on request after a wider look at tools and papers. 79 configurations were measured to the end (including 3 of our own and 2 combinations).
 
-Each tool was run with the settings its own documentation recommends. When a default model could not be used under our model-use rules, it was replaced, and the change is written in the Notes column of the full table. Every recommended-configuration run also got its own run check, with the verdicts valid, partly valid and invalid. The table shows the 26 valid ones and three exceptions.
+Each tool was run with the settings its own documentation recommends. Some tools ship with a default model that our own model-use rules rule out; in those cases the default was replaced by another model, and each replacement is written in the Notes column of the full table. Every recommended-configuration run also got its own run check, with the verdicts valid, partly valid and invalid. The table shows the 26 valid ones and three exceptions.
 
 - Baseline: every comparison is made against it, so it is shown.
 - Reference row: the semantic search setup we used in daily work. It is valid, but it is not any tool's recommended configuration, so it is marked as a reference row.
@@ -115,13 +117,13 @@ Each tool was run with the settings its own documentation recommends. When a def
 
 Every other configuration is shown neither by name nor by score; only counts are given. Of the 79 measured, 29 are in the table. 83 configurations are not shown: 50 that were measured and then left out, 13 that were closed by prediction, and 20 that could not be measured.
 
-The four numbers 84, 79, 13 and 20 count different things and do not add up to one total. The 84 are the candidates put forward. The 79 are measured test configurations: they include 3 of our own and 2 combinations, and one tool can appear with more than one configuration, for example a tool whose recommended configuration was blocked and that was measured in a configuration that needs no key. The 13 closed by prediction are 7 single tools and 6 combinations. The 20 that could not be measured are 2 blocked by our model-use rules, 15 of a kind these questions cannot measure, namely decision-record and session-record tools, and 3 whose required keys were not provided. Each is counted per configuration, and we did not map them one by one back to the 84.
+The four numbers 84, 79, 13 and 20 count different things and do not add up to one total. The 84 are the candidates put forward. The 79 are measured test configurations: they include 3 of our own and 2 combinations, and one tool can appear with more than one configuration, for example a tool whose recommended configuration was blocked and that was measured in a configuration that needs no key. The 13 closed by prediction are 7 single tools and 6 combinations. The 20 that could not be measured are 2 whose default model our model-use rules rule out and that could not be tested with a replacement, 15 of a kind these questions cannot measure, namely decision-record and session-record tools, and 3 whose required keys were not provided. Each is counted per configuration, and we did not map them one by one back to the 84. The 83 not shown and the 79 measured overlap only in the 50 that were measured and left out; the 13 and the 20 were never measured.
 
 ## Measurement procedure and metrics
 
 1. For each configuration, the 287 sample notes are loaded into the tool with the recommended settings described above.
 2. The 100 questions are asked one by one and the top 5 note file names are collected. Most configurations were run once.
-3. The top 5 notes go to a fixed answer step: every configuration uses the same model and the same instruction, and reads only the first 6,000 characters of each note.
+3. The top 5 notes go to a fixed answer step: every configuration uses the same model and the same instruction, and reads only the first 6,000 characters of each note. The model that writes the answers is not named in the published materials.
 4. The counts against the baseline, paired question by question, are computed with `harness/pair_stats.py`.
 
 ### Metric guide
@@ -143,7 +145,7 @@ Grader agreement: a context that was neither the worker nor the first grader re-
 
 Against the baseline, each configuration gets an exact two-sided sign test on the numbers of wins and losses. Questions that both hit, or both missed, are not counted. When the p-value is below 0.05 the difference is called confirmed.
 
-Because there were 79 comparisons, about 4 of them would fall below 0.05 by chance alone if nothing is corrected. So do not rely on one p-value: look at the wins and losses as well. For configurations that were repeated with the same settings, the range of the repeats is given.
+There were 78 comparisons (the 79 measured configurations minus the baseline itself), so about 4 of them would fall below 0.05 by chance alone if nothing is corrected. So do not rely on one p-value: look at the wins and losses as well. For configurations that were repeated with the same settings, the range of the repeats is given.
 
 ## Threats to validity and limitations
 
@@ -152,7 +154,7 @@ Because there were 79 comparisons, about 4 of them would fall below 0.05 by chan
 - The top scores crowd near the maximum (a ceiling effect). Only one configuration reaches 98 or more (agent search, 99), so these questions can hardly tell the top configurations apart.
 - Most configurations were run once. Rerun with the same settings, the top 5 lists of agent search changed on 36-45% of the questions while the Hit@5 was 98 in one run and 99 in the other. The hierarchical index scored 90-92 over three runs.
 - The answer score is the value after a fixed answer step that read only the first 6,000 characters of each note. It measures finding and reading together.
-- The 79 comparisons were not corrected (Statistics section).
+- The 78 comparisons were not corrected (Statistics section).
 - In the note-rewrite check, agreement of the checking contexts was low (kappa 0.38). Read the size of the rates as approximate.
 - A configuration run with a replaced model does not show the score of the product's own default setup. Tool versions are as of 2026-11 and may change.
 - Notes that hold personal data and operating records were left out of the sample, so questions about such notes were not measured.
@@ -170,7 +172,8 @@ The baseline is the Korean BM25 search we used. Each fact has its own source lin
 - Score: BM25 scoring with the default values of bm25s, k1 and b; a note scores as its best chunk, and notes are returned best first.
 - Fixed answer step: the top 5 notes, each cut to its first 6,000 characters, go to a language model that answers in one or two sentences, or says "근거 없음" (no evidence) when the notes hold no answer.
 - Chosen configuration: agent search on top of this baseline. It reached a Hit@5 of 99 of 100 and an answer score of 189 (the baseline scored 150).
-- Reference row: the basic-memory production setting row in the table is "the semantic search setup we used". It is the hybrid search of basic-memory 0.23.2, which mixes full-text and vector search, with a similarity threshold of 0.55, and it scored 48.
+- Reference row: the basic-memory production setting row in the table is "the semantic search setup we used". It is the hybrid search of basic-memory 0.23.2, which mixes full-text and vector search, with a similarity threshold of 0.55, and it scored a Hit@5 of 48 (of 100).
+- Difference between two similar rows: the Basic Memory 1.0 product row (46) is the product's recommended setup with the embedding replaced and the minimum similarity lowered to 0.3, while the reference row (48) is our own production setup of basic-memory 0.23.2 with a similarity threshold of 0.55, measured as it ran in daily work.
 
 The bundled `baseline/search.py` re-implements this baseline as separate code. On the demo sample its top 5 lists equal those of the production code.
 
@@ -228,7 +231,7 @@ python baseline/search.py --notes demo/notes --cache cache --questions demo/ques
 
 ### Test your own system
 
-1. Make your own notes folder and a question file (`spec/question-format.md`). Fix the answer notes before you run any tool.
+1. Make your own notes folder and a question file (`spec/question-format.md`).
 2. Attach one tool as described in `adapters/README.md`: a command that takes one question and returns the top 5 note file names.
 3. Collect the `top5.jsonl` files and run `harness/pair_stats.py` with `--base <the config name of your baseline>` for the baseline and the paired comparison. `baseline/search.py` writes the same row layout, so its output can be one of the inputs.
 4. If you need answer scores, build blind grading input with `harness/blind_grade.py` and grade it with `spec/rubric.md`.
