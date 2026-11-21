@@ -4,7 +4,7 @@
   python tools/make_tables.py
 
 The narrow results table and the appendix table in both README files, and the full 13-column table in
-results/full-table.md and results/full-table.ko.md, are generated here and nowhere else (the first column `#` numbers the rows by questions found, equal counts sharing a number, and shows `-` for the baseline, the reference row and the on-hold row), so the two
+results/full-table.md and results/full-table.ko.md, are generated here and nowhere else (the first column `#` numbers the rows by Hit@5, equal counts sharing a number, and shows `-` for the baseline, the reference row and the on-hold row), so the two
 editions always show the same numbers. A region is the text between
 
   <!-- table:NAME -->  and  <!-- /table:NAME -->
@@ -21,34 +21,34 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 TXT = {
     "ko": {
-        "kind": {"baseline": "비교 기준", "reference": "참고 행", "product": "제품", "technique": "기법"},
-        "group": {"memory-store": "기억 저장", "embedding": "임베딩 중심", "hybrid": "키워드와 벡터 혼합", "keyword": "키워드",
-                  "agent": "에이전트", "rerank": "리랭킹", "other": "기타"},
+        "kind": {"baseline": "베이스라인", "reference": "참고 행", "product": "제품", "technique": "기법"},
+        "group": {"memory-store": "기억 저장", "embedding": "임베딩 중심", "hybrid": "BM25와 벡터 혼합", "keyword": "키워드 검색 계열",
+                  "agent": "에이전트 검색", "rerank": "리랭킹", "other": "기타"},
         "yn": {"yes": "예", "no": "아니오", "n/a": "해당 없음"},
         "first": "첫 실행",
         "second": "둘째 실행",
         "interim": "중간 결과",
         "hold": "보류 중",
-        "narrow": ["#", "이름", "종류", "찾은 질문 수(100)", "더 찾음 / 덜 찾음", "우연일 확률(p)", "조건"],
-        "full": ["#", "이름", "종류", "분류", "질문할 때 언어 모델 호출", "정답 노트를 상위 5개 안에 찾은 질문 수(100)",
-                    "기준보다 더 찾은 질문", "기준보다 덜 찾은 질문", "우연일 확률", "노트 두 개가 필요한 질문 25개 중 둘 다 찾은 수",
-                    "답 점수(200)", "설치 조건(키, 모델, RAM)", "권장 구성대로 돌았는가", "권장 구성과 다른 점, 실행 조건"],
+        "narrow": ["#", "이름", "종류", "Hit@5(100개 중)", "승 / 패(베이스라인 대비)", "p값", "비고"],
+        "full": ["#", "이름", "종류", "분류", "질문할 때 언어 모델 호출", "Hit@5(100개 중)",
+                    "승(베이스라인 대비)", "패(베이스라인 대비)", "p값(부호 검정)", "멀티홉 질문 25개 중 정답 노트 둘 다 상위 5개 안에 든 수",
+                    "answer score(답 점수, 200점 만점)", "설치 조건(키, 모델, RAM)", "권장 구성대로 돌았는가", "비고(권장 구성과 다른 점, 실행 조건)"],
         "appendix": ["식별자", "이름", "분류", "질문할 때 언어 모델 호출"],
     },
     "en": {
         "kind": {"baseline": "baseline", "reference": "reference row", "product": "product", "technique": "technique"},
-        "group": {"memory-store": "memory store", "embedding": "embedding-centred", "hybrid": "keyword and vector mix",
-                  "keyword": "keyword", "agent": "agent", "rerank": "reranking", "other": "other"},
+        "group": {"memory-store": "memory store", "embedding": "embedding-centred", "hybrid": "BM25 and vector mix",
+                  "keyword": "lexical search", "agent": "agent search", "rerank": "reranking", "other": "other"},
         "yn": {"yes": "yes", "no": "no", "n/a": "n/a"},
         "first": "first run",
         "second": "second run",
         "interim": "interim result",
         "hold": "on hold",
-        "narrow": ["#", "Name", "Kind", "Found (of 100)", "Gained / lost", "Chance it is luck (p)", "Condition"],
-        "full": ["#", "Name", "Kind", "Group", "Language model at query time", "Questions with the answer note in the top 5 (of 100)",
-                    "Questions gained against the baseline", "Questions lost against the baseline", "p-value",
-                    "Both notes found, of the 25 questions that need two notes", "Answer score (of 200)",
-                    "Setup (key, model, RAM)", "Followed the recommended configuration", "Differences from the recommendation, run conditions"],
+        "narrow": ["#", "Name", "Kind", "Hit@5 (of 100)", "Wins / Losses (vs. baseline)", "p-value", "Notes"],
+        "full": ["#", "Name", "Kind", "Group", "Language model at query time", "Hit@5 (of 100)",
+                    "Wins (vs. baseline)", "Losses (vs. baseline)", "p-value (sign test)",
+                    "Multi-hop: both answer notes in the top 5 (of 25 questions)", "Answer score (of 200)",
+                    "Setup (key, model, RAM)", "Followed the recommended configuration", "Notes (differences from the recommendation, run conditions)"],
         "appendix": ["Identifier", "Name", "Group", "Language model at query time"],
     },
 }
@@ -72,7 +72,7 @@ def ordered(rows):
 
 def numbers(rows):
     """The # column: '-' for the baseline, the reference row and the on-hold row; the others are numbered by
-    found (hit5), descending, equal found share a number and the next number skips (1, 2, 2, 4)."""
+    Hit@5 (hit5), descending, equal Hit@5 share a number and the next number skips (1, 2, 2, 4)."""
     out, ranked = {}, []
     for r in rows:
         if r["kind"] in ("baseline", "reference") or r["hit5_first"]:

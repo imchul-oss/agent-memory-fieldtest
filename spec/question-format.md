@@ -8,7 +8,7 @@ One question per line in a JSON Lines file (UTF-8). The field test used 100 ques
 | `q` | string | Question id, unique in the file (`Q1`, `Q2`, ...). Every result file joins on it. |
 | `type` | string | One of `direct`, `paraphrase`, `multi`, `update` (below). |
 | `question` | string | The question text, in Korean or English, written so that a person who has not read the notes can ask it. |
-| `gold_files` | list of strings | File names of the notes that hold the answer. One name for most questions, two for `multi`. A question counts as found when at least one gold note is among the top 5; a `multi` question counts as fully found when all of them are. |
+| `gold_files` | list of strings | File names of the notes that hold the answer. One name for most questions, two for `multi`. A question counts as a Hit@5 hit when at least one gold note is among the top 5; a `multi` (multi-hop) question counts as fully found when all of them are. |
 | `gold_answer` | string | The reference answer in one or two sentences. Used only by the grader. |
 | `gold_facts` | list of strings | The short facts the answer must contain. Used only by the grader. |
 
@@ -19,10 +19,10 @@ questions, because the notes they were written from are not published. The demo 
 
 | `type` | Count in the field test | What it checks |
 |---|---|---|
-| `direct` | 20 | The question uses the words of the note. A keyword search should find it. |
+| `direct` | 20 | The question uses the words of the note. A BM25 search should find it. |
 | `paraphrase` | 25 | The question says the same thing in other words, so exact word overlap is weak. |
-| `multi` | 25 | The answer needs two notes read together. Both notes must be found. |
-| `update` | 30 | The note states a value that was later changed in a newer note. The question asks for the latest value, or for the old value and why it changed. |
+| `multi` | 25 | Multi-hop: the answer needs two notes read together. Both notes must be found. |
+| `update` | 30 | Knowledge update: the note states a value that was later changed in a newer note. The question asks for the latest value, or for the old value and why it changed. |
 
 ## Rules for writing questions
 
