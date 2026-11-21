@@ -1,0 +1,10 @@
+{"q": "Q1", "type": "direct", "question": "한라산 정상의 화산호는 이름이 무엇이고 어떤 뜻에서 왔다고 전해지는가?", "gold_files": ["한라산.md"]}
+{"q": "Q2", "type": "direct", "question": "제주도의 일주도로 길이는 몇 km인가?", "gold_files": ["제주도.md"]}
+{"q": "Q3", "type": "paraphrase", "question": "겨울을 나려고 김치를 한꺼번에 많이 담그는 일을 무엇이라 부르는가?", "gold_files": ["김치.md"]}
+{"q": "Q4", "type": "direct", "question": "한강 본류의 총연장은 얼마이며 어느 해 판 자료집에 따른 값인가?", "gold_files": ["한강.md"]}
+{"q": "Q5", "type": "multi", "question": "설악산과 한라산 가운데 어느 산이 더 높고, 각각의 해발고도는 얼마인가?", "gold_files": ["설악산.md", "한라산.md"]}
+{"q": "Q6", "type": "multi", "question": "제주도가 세계자연유산에 등록된 때는 언제이며, 그 중심이 되는 산은 무엇인가?", "gold_files": ["제주도.md", "한라산.md"]}
+{"q": "Q7", "type": "direct", "question": "Which gases are excited by charged particles in an aurora, and what colours do they emit?", "gold_files": ["Aurora.md"]}
+{"q": "Q8", "type": "paraphrase", "question": "Which insect builds hexagonal wax cells and stores surplus food as honey?", "gold_files": ["Honey_bee.md"]}
+{"q": "Q9", "type": "paraphrase", "question": "Why is tidal energy considered more predictable than wind or sun, and what did old tide mills grind?", "gold_files": ["Tidal_power.md"]}
+{"q": "Q10", "type": "direct", "question": "Where does hotspot volcanism come from, and which island chain is an example?", "gold_files": ["Volcano.md"]}

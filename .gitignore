@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+out/
+cache/
+*.log
+.env
+*.key
+*.pem
+*.safetensors
+*.onnx
+*.bin
+.DS_Store

@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use these results or the measurement tools, please cite them as below. The code is under the MIT license; the results and documents are under CC BY 4.0 (RESULTS-LICENSE.md)."
+title: agent-memory-fieldtest
+type: software
+authors:
+  - name: imchul-oss
+repository-code: "https://github.com/imchul-oss/agent-memory-fieldtest"
+abstract: "A field test of agent memory and note retrieval tools on 287 mixed Korean and English notes, with 100 questions, paired comparison against a Korean keyword-search baseline, and the measurement tools."
+keywords:
+  - retrieval
+  - agent memory
+  - Korean
+  - BM25
+license: MIT
