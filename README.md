@@ -2,6 +2,8 @@
 
 **English** | [한국어](README.ko.md)
 
+<!-- disclaimer --><sub>Results of a personal experiment, not an absolute evaluation or ranking; other data, environments and settings may give different results. Tool names and trademarks belong to their owners, and this repository is not affiliated with or endorsed by them.</sub>
+
 This test asked how well agent memory tools find the right note on mixed Korean and English notes, using Hit@5[^hit5] (of 100): the number of questions for which an answer note lands in the top 5 results. Agent search[^agent] reached 99 of 100 questions, against 84 for the baseline[^baseline], plain BM25[^bm25] search. Among products that ran to the end in their recommended setup and call no language model at query time, ir scored highest at 93, with its optional reranking[^rerank] step switched off. The semantic search setup we used before, which compares notes by embedding[^embedding] similarity, scored 48. The table gives a p-value[^pvalue] for each row that has a completed score, from an exact two-sided sign test[^sign].
 
 This is a field test of agent memory tools on real notes that mix Korean and English, not a new memory system. It reports a measured comparison and the setup chosen from it. The same method measured 79 configurations on 287 notes and 100 questions, and the table in this repository holds 29 rows. 26 of them ran to the end in their recommended setup and passed the run check. The other 3 are exceptions: the BM25 baseline, one reference row (the semantic search setup we used before), and Hindsight, which is on hold with interim results only.
@@ -57,7 +59,7 @@ The 83 configurations that are not in this table are listed with their reasons i
 These conclusions are about agent memory tools on mixed Korean and English notes, and each rests on the table above.
 
 - <!-- claim:C1 -->Agent search on top of BM25 search reached a Hit@5 of 99 of 100 (the baseline: 84), with 16 wins and 1 loss, a p-value below 0.001, answer scores of 189 against 150, and 98-99 when the same setup was run again.
-- <!-- claim:C2 -->No memory-store product that ran to the end in its recommended setup was confirmed to beat the BM25 baseline: of the 5, the best, MemPalace (83), had 4 wins and 5 losses for a p-value of 1.000, and the rest scored 66-82. Hindsight is on hold and is not part of this conclusion.
+- <!-- claim:C2 -->No memory-store product in the table, all run to the end in its recommended setup, was confirmed to beat the BM25 baseline: of the 5, the best, MemPalace (83), had 4 wins and 5 losses for a p-value of 1.000, and the rest scored 66-82. Hindsight is on hold and is not part of this conclusion.
 - <!-- claim:C3 -->The 5 embedding-centred tools in the table, all run to the end in their recommended setup, scored 46-81 and did not pass the baseline, and the Basic Memory recommended run, with its embedding replaced and its minimum similarity lowered, was lowest at 46, but ir, which mixes BM25 and vectors, scored 93 and beat the baseline (10 wins, 1 loss, p-value 0.012).
 - <!-- claim:C4 -->Among products that ran to the end in their recommended setup and call no language model at query time, ir scored highest at 93, with an answer score of 167, 10 wins, 1 loss and a p-value of 0.012.
 - <!-- claim:C5 -->Adding KURE-v2 reranking to the top 50 of BM25 search gave a Hit@5 of 88, and the answer score rose by a confirmed margin (10 wins, 0 losses, p-value 0.002); the difference in Hit@5 is not yet confirmed (4 wins, 0 losses, p-value 0.125).
@@ -153,7 +155,7 @@ There were 78 comparisons (the 79 measured configurations minus the baseline its
 
 - The sample is 287 notes in one folder, while the real store holds about 1,800 notes with a folder structure. Nothing was measured at the real scale (unverified).
 - The 100 questions were written from the sample notes, so words of the notes may have leaked into the questions and may favour BM25 search (estimate).
-- The top scores crowd near the maximum (a ceiling effect). Among configurations run to the end in the recommended setup, only one reaches 98 or more (agent search, 99), so these questions can hardly tell the top configurations apart.
+- The top scores crowd near the maximum (a ceiling effect). Among the rows in the table, which ran to the end in the recommended setup and were judged valid by the run check, only one reaches 98 or more (agent search, 99), so these questions can hardly tell the top configurations apart.
 - Most configurations were run once. Rerun with the same settings, the top 5 lists of agent search changed on 36-45% of the questions while the Hit@5 was 98 in one run and 99 in the other. The hierarchical index scored 90-92 over three runs.
 - The answer score is the value after a fixed answer step that read only the first 6,000 characters of each note. It measures finding and reading together.
 - The 78 comparisons were not corrected (Statistics section).

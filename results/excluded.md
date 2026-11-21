@@ -1,8 +1,10 @@
 # Configurations not in the results table
 
+<!-- disclaimer --><sub>Results of a personal experiment, not an absolute evaluation or ranking; other data, environments and settings may give different results. Tool names and trademarks belong to their owners, and this repository is not affiliated with or endorsed by them.</sub>
+
 This page lists the 83 configurations that are not in the results table of the [README](../README.md): 50 that were measured and then left out, 13 that were closed by prediction without a run, and 20 that could not be measured. Tool names are written as the tools call themselves. No other page lists these configurations by name.
 
-The scores on this page cannot be compared with the README table under the same conditions. The README table holds only configurations that ran to the end in the tool's recommended setup and passed the run check. The rows here were left out because they were not the recommended setup or were not run to the end (a reduced setup, a part we replaced, a store only partly built), because their setups differ from one another (some are agents that read the note files themselves, some are our own combinations), or because they were run once and a gap of a few questions can be chance. Read each score only next to its reason.
+The scores on this page cannot be compared with the README table under the same conditions. The README table holds only configurations that ran to the end in the tool's recommended setup and passed the run check, apart from three exceptions: the baseline[^baseline], one reference row, and Hindsight, which is on hold with interim results only. The rows here were left out because they were not the recommended setup or were not run to the end (a reduced setup, a part we replaced, a store only partly built), because their setups differ from one another (some are agents that read the note files themselves, some are our own combinations), or because they were run once and a gap of a few questions can be chance. Read each score only next to its reason.
 
 The Hit@5[^hit5] column counts, out of 100 questions, those for which an answer note is among the top 5 results. Wins and losses count questions against the baseline[^baseline], our Korean BM25[^bm25] search, and the p-value[^pvalue] comes from an exact two-sided sign test[^sign]. A row whose p-value is 0.05 or more shows no confirmed difference from the baseline. The reasons mention embedding[^embedding] models, reranking[^rerank] steps and agent search[^agent], in which a model searches and reads the note files step by step. Rows that could not be run or were closed by prediction have no score, and show a - in the score columns.
 
@@ -61,7 +63,7 @@ The Hit@5[^hit5] column counts, out of 100 questions, those for which an answer 
 | llmwiki (no-key setup) | product | measured, then left out | 0 | 0 / 84 | <0.001 | Run check: invalid. Its search joins every word with AND, so full-sentence questions returned nothing for all 100. The tool is meant for an agent that shortens the query. Its recommended run is the other llmwiki row. |
 | agentmemory (recommended setup) | product | closed by prediction | - | - | - | Closed by prediction without a run. This configuration has no measured value. |
 | claude-mem (recommended setup) | product | closed by prediction | - | - | - | Closed by prediction without a run. This configuration has no measured value. |
-| Cognee | product | closed by prediction | - | - | - | Closed by prediction without a run. This configuration has no measured value. |
+| cognee | product | closed by prediction | - | - | - | Closed by prediction without a run. This configuration has no measured value. |
 | Combination: swap the decision-record layer only (our combination) | technique | closed by prediction | - | - | - | Closed by prediction without a run. This configuration has no measured value. |
 | Combination: swap the distilling layer only (our combination) | technique | closed by prediction | - | - | - | Closed by prediction without a run. This configuration has no measured value. |
 | Combination: swap the search layer only (our combination) | technique | closed by prediction | - | - | - | Closed by prediction without a run. This configuration has no measured value. |
@@ -73,7 +75,7 @@ The Hit@5[^hit5] column counts, out of 100 questions, those for which an answer 
 | mex (recommended setup) | product | closed by prediction | - | - | - | Closed by prediction without a run. This configuration has no measured value. |
 | Remnic (recommended setup) | product | closed by prediction | - | - | - | Closed by prediction without a run. This configuration has no measured value. |
 | adrkit | product | could not be measured | - | - | - | A kind of tool that these 100 questions cannot measure. |
-| Agent Decision Record (AgDR) (our implementation) | technique | could not be measured | - | - | - | A kind of tool that these 100 questions cannot measure. |
+| Agent Decision Record (AgDR) (our implementation) | technique | could not be measured | - | - | - | A kind of technique that these 100 questions cannot measure. |
 | agent-beacon | product | could not be measured | - | - | - | A kind of tool that these 100 questions cannot measure. |
 | ChunkHound (recommended setup) | product | could not be measured | - | - | - | A required condition, a key or an account, was not available, so the tool could not be run. |
 | Citadel | product | could not be measured | - | - | - | A kind of tool that these 100 questions cannot measure. |
@@ -86,7 +88,7 @@ The Hit@5[^hit5] column counts, out of 100 questions, those for which an answer 
 | LogNexus | product | could not be measured | - | - | - | A kind of tool that these 100 questions cannot measure. |
 | mcp-adr-analysis-server | product | could not be measured | - | - | - | A kind of tool that these 100 questions cannot measure. |
 | metatron | product | could not be measured | - | - | - | A kind of tool that these 100 questions cannot measure. |
-| Open Loops Ledger | product | could not be measured | - | - | - | A kind of tool that these 100 questions cannot measure. |
+| Open Loops Ledger | product | could not be measured | - | - | - | A kind of tool that these 100 questions cannot measure. The run-check record adds that the source could not be downloaded because the network was blocked, and nothing was installed or run. |
 | OpenSpec | product | could not be measured | - | - | - | A kind of tool that these 100 questions cannot measure. |
 | planning-with-files | product | could not be measured | - | - | - | A kind of tool that these 100 questions cannot measure. |
 | QMD (recommended setup) | product | could not be measured | - | - | - | A required model is ruled out by our model-use rule, and the tool could not be run without it. |

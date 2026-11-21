@@ -55,7 +55,7 @@ L-6269a8f4-rec,predicted,agentmemory (권장 구성),agentmemory (recommended se
 L-8bbb3edb-rec,predicted,Graphiti (권장 구성),Graphiti (recommended setup),product,,,,,not-run,돌리지 않고 결과를 예상해 닫았습니다. 이 구성은 잰 값이 없습니다.,Closed by prediction without a run. This configuration has no measured value.
 L-b8d82694-rec,predicted,claude-mem (권장 구성),claude-mem (recommended setup),product,,,,,not-run,돌리지 않고 결과를 예상해 닫았습니다. 이 구성은 잰 값이 없습니다.,Closed by prediction without a run. This configuration has no measured value.
 L-c685a1c2-rec,predicted,mex (권장 구성),mex (recommended setup),product,,,,,not-run,돌리지 않고 결과를 예상해 닫았습니다. 이 구성은 잰 값이 없습니다.,Closed by prediction without a run. This configuration has no measured value.
-L-d3c6a1fa-rec,predicted,Cognee,Cognee,product,,,,,not-run,돌리지 않고 결과를 예상해 닫았습니다. 이 구성은 잰 값이 없습니다.,Closed by prediction without a run. This configuration has no measured value.
+L-d3c6a1fa-rec,predicted,cognee,cognee,product,,,,,not-run,돌리지 않고 결과를 예상해 닫았습니다. 이 구성은 잰 값이 없습니다.,Closed by prediction without a run. This configuration has no measured value.
 stack-best,predicted,조합: 층마다 고른 도구를 모두 이어 붙임 (우리 쪽 조합),Combination: the chosen tool of every layer chained together (our combination),technique,,,,,not-run,돌리지 않고 결과를 예상해 닫았습니다. 이 구성은 잰 값이 없습니다.,Closed by prediction without a run. This configuration has no measured value.
 swap-decision,predicted,조합: 결정 기록 층 하나만 바꿈 (우리 쪽 조합),Combination: swap the decision-record layer only (our combination),technique,,,,,not-run,돌리지 않고 결과를 예상해 닫았습니다. 이 구성은 잰 값이 없습니다.,Closed by prediction without a run. This configuration has no measured value.
 swap-distill,predicted,조합: 정리 층 하나만 바꿈 (우리 쪽 조합),Combination: swap the distilling layer only (our combination),technique,,,,,not-run,돌리지 않고 결과를 예상해 닫았습니다. 이 구성은 잰 값이 없습니다.,Closed by prediction without a run. This configuration has no measured value.
@@ -64,7 +64,7 @@ swap-session,predicted,조합: 세션 기록 층 하나만 바꿈 (우리 쪽 �
 swap-storage,predicted,조합: 저장 층 하나만 바꿈 (우리 쪽 조합),Combination: swap the storage layer only (our combination),technique,,,,,not-run,돌리지 않고 결과를 예상해 닫았습니다. 이 구성은 잰 값이 없습니다.,Closed by prediction without a run. This configuration has no measured value.
 L-01deb854-rec,blocked,decisions 플러그인,decisions plugin,product,,,,,not-measurable,이 질문 100개로는 잴 수 없는 종류의 도구입니다.,A kind of tool that these 100 questions cannot measure.
 L-07b1430a-rec,blocked,mcp-adr-analysis-server,mcp-adr-analysis-server,product,,,,,not-measurable,이 질문 100개로는 잴 수 없는 종류의 도구입니다.,A kind of tool that these 100 questions cannot measure.
-L-1897ac74-rec,blocked,Open Loops Ledger,Open Loops Ledger,product,,,,,not-measurable,이 질문 100개로는 잴 수 없는 종류의 도구입니다.,A kind of tool that these 100 questions cannot measure.
+L-1897ac74-rec,blocked,Open Loops Ledger,Open Loops Ledger,product,,,,,not-measurable,이 질문 100개로는 잴 수 없는 종류의 도구입니다. 실행 점검 기록에는 네트워크가 막혀 소스를 받지 못했고 설치도 실행도 하지 않았다고 적혀 있습니다.,"A kind of tool that these 100 questions cannot measure. The run-check record adds that the source could not be downloaded because the network was blocked, and nothing was installed or run."
 L-4271ddae-rec,blocked,metatron,metatron,product,,,,,not-measurable,이 질문 100개로는 잴 수 없는 종류의 도구입니다.,A kind of tool that these 100 questions cannot measure.
 L-57547747-rec,blocked,funes,funes,product,,,,,rule,"우리 모델 사용 규칙에 필요한 모델이 걸리고, 그 모델 없이는 이 도구를 돌릴 수 없었습니다.","A required model is ruled out by our model-use rule, and the tool could not be run without it."
 L-5d4d1926-rec,blocked,LogNexus,LogNexus,product,,,,,not-measurable,이 질문 100개로는 잴 수 없는 종류의 도구입니다.,A kind of tool that these 100 questions cannot measure.
@@ -81,4 +81,4 @@ L-c3429e58-rec,blocked,agent-beacon,agent-beacon,product,,,,,not-measurable,이 
 L-c9f3ad75-rec,blocked,QMD (권장 구성),QMD (recommended setup),product,,,,,rule,"우리 모델 사용 규칙에 필요한 모델이 걸리고, 그 모델 없이는 이 도구를 돌릴 수 없었습니다.","A required model is ruled out by our model-use rule, and the tool could not be run without it."
 L-d501f2c0-rec,blocked,session-orchestrator,session-orchestrator,product,,,,,not-measurable,이 질문 100개로는 잴 수 없는 종류의 도구입니다.,A kind of tool that these 100 questions cannot measure.
 L-ec7af377-rec,blocked,adrkit,adrkit,product,,,,,not-measurable,이 질문 100개로는 잴 수 없는 종류의 도구입니다.,A kind of tool that these 100 questions cannot measure.
-ours-bm25+L-df36f07f,blocked,Agent Decision Record(AgDR) (우리 쪽 구현),Agent Decision Record (AgDR) (our implementation),technique,,,,,not-measurable,이 질문 100개로는 잴 수 없는 종류의 도구입니다.,A kind of tool that these 100 questions cannot measure.
+ours-bm25+L-df36f07f,blocked,Agent Decision Record(AgDR) (우리 쪽 구현),Agent Decision Record (AgDR) (our implementation),technique,,,,,not-measurable,이 질문 100개로는 잴 수 없는 종류의 기법입니다.,A kind of technique that these 100 questions cannot measure.
