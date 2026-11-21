@@ -8,7 +8,7 @@ This is a field test of agent memory tools on real notes that mix Korean and Eng
 
 Author: imchul-oss.
 
-<!-- prior --> Searched on 2026-11-21. Query: agent memory tools benchmark Korean English mixed notes. Result: the list held general agent-memory benchmarks, for example "Evaluating Memory in LLM Agents via Incremental Multi-Turn Interactions" (https://arxiv.org/html/2507.05257v2) and "Memory in the LLM Era" (https://arxiv.org/html/2604.01707v1), and none of its results dealt with mixed Korean and English notes; I found no public comparison of memory-tool products on the same notes and the same questions. Difference: this repository compares 19 products (18 run to the end, Hindsight on hold) and 8 techniques on the same 100 questions, and also reports answer scores and the run check.
+<!-- prior --> Searched on 2026-11-21. Query: agent memory tools benchmark Korean English mixed notes. Result: the list held general agent-memory benchmarks, for example "Evaluating Memory in LLM Agents via Incremental Multi-Turn Interactions" (https://arxiv.org/html/2507.05257v2) and "Memory in the LLM Era" (https://arxiv.org/html/2604.01707v1). Each of these two studies compares memory products and methods on the same data and the same questions, but none of the results dealt with mixed Korean and English notes, and we found no public comparison of memory-tool products on notes that mix Korean and English. Difference: besides the language mix and real working notes, this repository compares 19 products (18 run to the end, Hindsight on hold) and 8 techniques on the same 100 questions, and also reports answer scores and the run check.
 
 ## Results
 
@@ -24,7 +24,7 @@ Author: imchul-oss.
 | - | Hindsight (on hold) | product | 88 (interim result, first run), 86 (interim result, second run) | - | - | On hold: the recommended setup could not be run to the end. Reaching 65% of the consolidation step on the 287 notes took about 2,000 model calls (1,974). Default or not (embedding model multilingual-e5-small, reranker model): not confirmed in the run record. |
 | 7 | Extra Korean morpheme BM25 route (lindera) | technique | 84 | 2 / 2 | 1.000 | The BM25 formula was implemented directly |
 | - | Korean BM25 search (baseline) | baseline | 84 | - | - | Not applicable (this is the baseline itself) |
-| 8 | EmbeddingGemma dense route added | technique | 83 | 2 / 3 | 1.000 | No difference recorded |
+| 8 | EmbeddingGemma dense route added | technique | 83 | 2 / 3 | 1.000 | No difference from the tool's recommended setup recorded in the run check |
 | 8 | MemPalace | product | 83 | 4 / 5 | 1.000 | An adapter keeps only the best chunk per note (30 chunks requested and merged) |
 | 10 | haiku.rag | product | 82 | 1 / 3 | 0.625 | The default model was replaced |
 | 10 | mLateOn reranking | technique | 82 | 2 / 4 | 0.688 | None of the 9 training languages is Korean (model card) |
@@ -66,7 +66,7 @@ These conclusions are about agent memory tools on mixed Korean and English notes
 
 ### About the table and the numbers
 
-The tables are generated from one source, `results/results.csv`. A row of the table above holds the # number, the name, the kind, Hit@5, wins and losses against the baseline, the p-value, and short notes. The full table in `results/full-table.md` adds group, setup, whether the recommended configuration was followed, and the differences, 13 columns in all. Rows are ordered by Hit@5, and rows with the same Hit@5 are ordered by answer score, then by identifier; equal Hit@5 share a number in #. The Hindsight row lists its two interim values in run order (first run, then second run) together with the conditions of each run. Its #, wins, losses and p-value cells are empty because interim values from unfinished runs are not compared with the baseline.
+The tables are generated from one source, `results/results.csv`. A row of the table above holds the # number, the name, the kind, Hit@5, wins and losses against the baseline, the p-value, and short notes. The full table in `results/full-table.md` adds group, setup, whether the recommended configuration was followed, and the differences, 13 columns in all. Rows are ordered by Hit@5, and rows with the same Hit@5 are ordered by answer score, then by identifier; equal Hit@5 share a number in #. The Hindsight row lists its two interim values in run order (first run, then second run) together with the conditions of each run. Its #, wins, losses and p-value cells are empty because interim values from unfinished runs are not compared with the baseline. The Hindsight row is on hold, so it has no # number; its place in the table follows the second-run value (86), while both interim values are listed in run order.
 
 In the full table, yes in the column on the recommended configuration means the run followed the tool's recommended setup apart from the replacements listed in the notes column. A technique is one of our own constructions or a pairing of tools and has no recommended setup of a tool, so for it yes means the run used the simplest documented setup. The baseline and the reference row show n/a.
 
@@ -113,7 +113,7 @@ Each tool was run with the settings its own documentation recommends. Some tools
 
 - Baseline: every comparison is made against it, so it is shown.
 - Reference row: the semantic search setup we used in daily work. It is valid, but it is not any tool's recommended configuration, so it is marked as a reference row.
-- Hindsight: on hold. The recommended setup, in which a language model extracts facts and merges memories, could not be run to the end because of the resources it needs: reaching 65% of the merging step on the 287 notes took about 2,000 model calls. One row holds the conditions of each run, and both values are shown as interim results. Its comparison cells against the baseline are left empty.
+- Hindsight: on hold. The recommended setup, in which a language model extracts facts and merges memories, could not be run to the end because of the resources it needs: reaching 65% of the consolidation step on the 287 notes took about 2,000 model calls. One row holds the conditions of each run, and both values are shown as interim results. Its comparison cells against the baseline are left empty.
 
 Every other configuration is shown neither by name nor by score; only counts are given. Of the 79 measured, 29 are in the table. 83 configurations are not shown: 50 that were measured and then left out, 13 that were closed by prediction, and 20 that could not be measured.
 
@@ -137,7 +137,7 @@ The four numbers 84, 79, 13 and 20 count different things and do not add up to o
 
 ## Grading and grader agreement
 
-The answer score is given by a grader who does not know which configuration wrote the answer. The grader sees only the question and its type, the reference answer, the list of required facts and one answer. Each answer is scored 0, 1 or 2 against the reference alone, with no outside knowledge and no penalty for a short answer; the full scale, including the rules for latest-value questions and questions that need two notes and for matching numbers and dates, is in `spec/rubric.md`. The tool that hides the configuration is `harness/blind_grade.py`.
+The answer score is given by a grader who does not know which configuration wrote the answer. The grader sees only the question and its type, the reference answer, the list of required facts and one answer. Each answer is scored 0, 1 or 2 against the reference alone, with no outside knowledge and no penalty for a short answer; the full scale, including the rules for knowledge update and multi-hop questions and for matching numbers and dates, is in `spec/rubric.md`. The tool that hides the configuration is `harness/blind_grade.py`.
 
 Grader agreement: a context that was neither the worker nor the first grader re-scored 60 blind answers, drawn with a fixed random seed (92053). 59 of the 60 got the same score from both graders and 1 differed (2 against 1), an agreement value of 0.983. This is a share of equal scores, not a kappa, and only 60 answers were re-scored. The note-rewrite check is a separate matter: there the two checking contexts agreed much less (kappa 0.38, the last part of the Results section).
 
@@ -159,7 +159,7 @@ There were 78 comparisons (the 79 measured configurations minus the baseline its
 - A configuration run with a replaced model does not show the score of the product's own default setup. Tool versions are as of 2026-11 and may change.
 - Notes that hold personal data and operating records were left out of the sample, so questions about such notes were not measured.
 - The table holds 26 configurations that ran to the end and passed the check, plus the baseline, one reference row and Hindsight on hold, so it cannot support statements about products in general.
-- Hindsight's two values are interim results: the recommended setup was not run to the end, and the two runs differ in more than the merging step. They reloaded the notes, used a different adapter, and the second run had a reranker candidate limit of 60. The difference between them cannot be read as an effect of merging, and no conclusion below rests on them.
+- Hindsight's two values are interim results: the recommended setup was not run to the end, and the two runs differ in more than the consolidation step. They reloaded the notes, used a different adapter, and the second run had a reranker candidate limit of 60. The difference between them cannot be read as an effect of merging, and no conclusion below rests on them.
 
 ## Baseline system
 
